@@ -1,6 +1,8 @@
 name: Maven build and upload to DockerHub
 
-on:
+on:  
+  schedule:
+    - cron: 0 0 * * *
   push:
   pull_request:
     branches: 
@@ -14,12 +16,6 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@v3.1.0
-      
-      - name: Fetch current time
-        id: current-time
-        uses: josStorer/get-current-time@v2.0.2
-        with:
-          format: YYYY-MM-DD-HH-mm-ss
           
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -39,4 +35,4 @@ jobs:
         with:
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/rso-micro-users:${{ steps.current-time.outputs.formattedTime }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/rso-micro-users:latest
