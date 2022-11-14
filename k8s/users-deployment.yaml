@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: micro-users
+  template:
+    metadata:
+      labels:
+        app: micro-users
+    spec:
+      containers:
+        - image: mihoci10/rso-micro-users:latest
+          name: micro-users
+          env:
+            - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
+              value: jdbc:postgresql://lucky.db.elephantsql.com/cbazngus
+            - name: KUMULUZEE_DATASOURCES0_USERNAME
+              value: cbazngus
+            - name: KUMULUZEE_DATASOURCES0_PASSWORD
+              value: 8MCNxV4NsSRwfdLT9g7bC0Jq-Ymf8xtO
+          ports:
+            - containerPort: 8080
+              name: server
+              protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: micro-users
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: server
+  selector:
+    app: micro-users

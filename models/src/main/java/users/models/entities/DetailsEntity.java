@@ -26,11 +26,11 @@ public class DetailsEntity {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "createdAt", columnDefinition = "timestamp without time zone default NOW()")
+    @Column(name = "\"createdAt\"")
     private Instant createdAt;
 
-    @Column(name = "gender")
-    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "gender", columnDefinition = "GenderType")
+    @Enumerated(EnumType.STRING)
     private UserDetails.Gender gender;
 
     public UserDetails.Gender getGender() {
