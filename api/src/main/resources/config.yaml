@@ -13,3 +13,6 @@ kumuluzee:
       username: postgres
       password: docker
       max-pool-size: 20
+
+rest-properties:
+  maintenance-mode: false

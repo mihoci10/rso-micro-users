@@ -5,17 +5,18 @@ import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.headers.Header;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.persistence.sessions.Login;
 import users.lib.UserDetails;
+import users.payload.LoginPayload;
+import users.payload.RegisterPayload;
 import users.services.beans.UsersBean;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -50,5 +51,47 @@ public class UserResource {
         List<UserDetails> usersData = usersBean.getAllUsers();
 
         return Response.status(Response.Status.OK).entity(usersData).build();
+    }
+
+    @Operation(description = "Register a new user", summary = "Register user")
+    @Path("register")
+    @POST
+    public Response registerUser(@RequestBody(
+            description = "Object with segment data.",
+            required = true, content = @Content(
+            schema = @Schema(implementation = RegisterPayload.class))) RegisterPayload registerPayload) {
+
+        try{
+            usersBean.registerUser(registerPayload);
+        }
+        catch (Exception e){
+            System.out.println(e);
+
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        return Response.status(Response.Status.OK).build();
+    }
+
+    @Operation(description = "Login with user credentials", summary = "Login user")
+    @APIResponses({
+            @APIResponse(responseCode = "200",
+                    description = "User data",
+                    content = @Content(schema = @Schema(implementation = UserDetails.class, type = SchemaType.OBJECT))
+            )})
+    @Path("login")
+    @POST
+    public Response loginUser(@RequestBody(
+            description = "Object with segment data.",
+            required = true, content = @Content(
+            schema = @Schema(implementation = LoginPayload.class))) LoginPayload loginPayload) {
+
+
+        UserDetails userDetails = usersBean.loginUser(loginPayload);
+
+        if(userDetails != null)
+            return Response.status(Response.Status.OK).entity(userDetails).build();
+
+        return Response.status(Response.Status.BAD_REQUEST).build();
     }
 }

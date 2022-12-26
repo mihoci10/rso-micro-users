@@ -7,7 +7,10 @@ import javax.persistence.*;
 @NamedQueries(value =
 {
 @NamedQuery(name = "UserEntity.getAll",
-        query = "SELECT u FROM UserEntity u")
+        query = "SELECT u FROM UserEntity u"),
+
+@NamedQuery(name = "UserEntity.login",
+        query = "SELECT u FROM UserEntity u WHERE u.cred.username = :user AND u.cred.password = :pass")
 })
 public class UserEntity {
 
