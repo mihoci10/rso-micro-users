@@ -13,6 +13,10 @@ kumuluzee:
       username: postgres
       password: docker
       max-pool-size: 20
+  config:
+    consul:
+        agent: 'http://localhost:8500'
+
 
 rest-properties:
   maintenance-mode: false
