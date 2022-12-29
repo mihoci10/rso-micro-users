@@ -23,6 +23,8 @@ spec:
               value: cbazngus
             - name: KUMULUZEE_DATASOURCES0_PASSWORD
               value: 8MCNxV4NsSRwfdLT9g7bC0Jq-Ymf8xtO
+            - name: KUMULUZEE_CONFIG_CONSUL_AGENT
+              value: 'http://10.244.0.14:8500'
           ports:
             - containerPort: 8080
               name: server
